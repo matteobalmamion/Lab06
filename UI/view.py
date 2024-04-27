@@ -6,9 +6,9 @@ class View(ft.UserControl):
         super().__init__()
         # page stuff
         self._page = page
-        self._page.title = "Template application using MVC and DAO"
+        self._page.title = "Lab 06"
         self._page.horizontal_alignment = 'CENTER'
-        self._page.theme_mode = ft.ThemeMode.DARK
+        self._page.theme_mode = ft.ThemeMode.LIGHT
         # controller (it is not initialized. Must be initialized in the main, after the controller is created)
         self._controller = None
         # graphical elements
@@ -20,27 +20,28 @@ class View(ft.UserControl):
 
     def load_interface(self):
         # title
-        self._title = ft.Text("Hello World", color="blue", size=24)
+        self._title = ft.Text("Analizza Vendite", color="blue", size=24)
         self._page.controls.append(self._title)
 
-        #ROW with some controls
-        # text field for the name
-        self.txt_name = ft.TextField(
-            label="name",
-            width=200,
-            hint_text="Insert a your name"
-        )
-
-        # button for the "hello" reply
-        self.btn_hello = ft.ElevatedButton(text="Hello", on_click=self._controller.handle_hello)
-        row1 = ft.Row([self.txt_name, self.btn_hello],
+        #ROW 1
+        self.ddAnno = ft.Dropdown(hint_text="anno",options=[])
+        self._controller.aggiungi_anni()
+        self.ddBrand=ft.Dropdown(hint_text="brand",options=[])
+        self._controller.aggiungi_brand()
+        self.ddRetailer=ft.Dropdown(hint_text="retailer",options=[],width=450)
+        self._controller.aggiungi_retailer()
+        row1=ft.Row([self.ddAnno,self.ddBrand,self.ddRetailer],alignment=ft.MainAxisAlignment.CENTER)
+        # ROW 2
+        self.btnTopVendite= ft.ElevatedButton(text="Top Vendite", on_click=self._controller.handleTopVendite)
+        self.btnAnalizzaVendite=ft.ElevatedButton(text="Analizza Vendite", on_click=self._controller.handleAnalizzaVendite)
+        row2 = ft.Row([self.btnTopVendite, self.btnAnalizzaVendite],
                       alignment=ft.MainAxisAlignment.CENTER)
-        self._page.controls.append(row1)
+
 
         # List View where the reply is printed
-        self.txt_result = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-        self._page.controls.append(self.txt_result)
-        self._page.update()
+        self.txtOut = ft.ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
+        self._page.add(row1,row2,self.txtOut)
+
 
     @property
     def controller(self):
